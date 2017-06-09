@@ -10,7 +10,7 @@ The goals / steps of this project are the following:
 
 ---
 
-![grayscale_image][./image_tmp/gray-solidYellowCurve.jpg]
+![grayscale_image](./image_tmp/gray-solidYellowCurve.jpg)
 
 ### Reflection
 
@@ -60,7 +60,7 @@ cv2.line(img, (x1, ysize-1), (x2, 325), [0, 0, 255], thickness)
 
 ### 2. Identify potential shortcomings with your current pipeline
 
-This pipeline is super dependent upon the mask. BEcause the mask is static, there are a few shortcomings I can think of as a result:
+This pipeline is super dependent upon the mask. Because the mask is static, there are a few shortcomings I can think of as a result:
 
 - Field of view / road change: Sharp hills, tunnels, hairpin curves would cause lane lines to run outside of the static mask and throw off line computations
 - Any object (another vehicle) that crosses the lane lines (entering the masked region) would throw off the mean computation of lane lines.
