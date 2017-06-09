@@ -26,8 +26,8 @@ The goals / steps of this project are the following:
 The pipleline goes like this:
 
 1. Store the dimensions of the image (for use in step X for setting the mask)
-2. Use the `grayscale()` helper function (`which calls cv2.cvtColor()`) to convert the image to grayscale
-[grayscale_image]:./image_tmp/gray-solidYellowCurve.jpg
+2. Use the `grayscale()` helper function (which calls `cv2.cvtColor()`) to convert the image to grayscale
+![grayscale_image]:./image_tmp/gray-solidYellowCurve.jpg
 
 In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
 
