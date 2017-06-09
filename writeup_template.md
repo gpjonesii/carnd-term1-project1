@@ -19,7 +19,7 @@ The pipleline goes like this:
 1. Store the dimensions of the image (for use in for setting the masked region of interest)
 2. Use the `grayscale()` helper function (which calls `cv2.cvtColor()`) to create a new image converted
 
-![grayscale_image]:./image_tmp/gray-solidYellowCurve.jpg "Grayscale"
+![grayscale_image]: (/image_tmp/gray-solidYellowCurve.jpg)  "Grayscale"
 
 3. Use the `gaussian_blur()` helper function (which calls `cv2.GaussianBlur()`), passing the grayscale image as input, returning a blurred image.
 
@@ -27,7 +27,7 @@ The pipleline goes like this:
 
 5. Create an image containing a mask, using predefined vertices (partially computed from image dimensions), the canny edges image, and leveraging the helper function `region_of_interest()`
 
-6. 
+6.
 
 In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
 
