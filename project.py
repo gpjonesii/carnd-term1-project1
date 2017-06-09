@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import math
 import matplotlib.pyplot as plt
@@ -47,27 +48,42 @@ def region_of_interest(img, vertices):
     masked_image = cv2.bitwise_and(img, mask)
     return masked_image
 
+def draw_lines(img, lines, color=[255, 0, 0], thickness=3):
 
-def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
-    """
-    NOTE: this is the function you might want to use as a starting point once you want to
-    average/extrapolate the line segments you detect to map out the full
-    extent of the lane (going from the result shown in raw-lines-example.mp4
-    to that shown in P1_example.mp4).
+    ysize = img.shape[0]
+    xsize = img.shape[1]
 
-    Think about things like separating line segments by their
-    slope ((y2-y1)/(x2-x1)) to decide which segments are part of the left
-    line vs. the right line.  Then, you can average the position of each of
-    the lines and extrapolate to the top and bottom of the lane.
+    leftlines = []
+    rightlines = []
 
-    This function draws `lines` with `color` and `thickness`.
-    Lines are drawn on the image inplace (mutates the image).
-    If you want to make the lines semi-transparent, think about combining
-    this function with the weighted_img() function below
-    """
+    slope = lambda x1,y1,x2,y2: (y1-y2)/(x1-x2)
+    getx  = lambda  b,y1,x2,y2: ((y1-y2)/b)+x2
+
     for line in lines:
         for x1,y1,x2,y2 in line:
-            cv2.line(img, (x1, y1), (x2, y2), color, thickness)
+            if slope(x1,y1,x2,y2) < 0:
+                leftlines.append(line)
+            elif slope(x1,y1,x2,y2) > 0:
+                rightlines.append(line)
+
+    rmean = np.array(rightlines).mean(axis=0).astype(int)
+    lmean = np.array(leftlines).mean(axis=0).astype(int)
+
+    #draw left lane line in blue
+    if type(lmean) is np.ndarray:
+        x1,y1,x2,y2 = lmean[0]
+        b = slope(x1,y1,x2,y2)
+        x1 = int(getx(b,ysize-1,x2,y2))
+        x2 = int(getx(b,325,x1,ysize-1))
+        cv2.line(img, (x1, ysize-1), (x2, 325), [0, 0, 255], thickness)
+
+    #draw right lane line in red
+    if type(rmean) is np.ndarray:
+        x1,y1,x2,y2 = rmean[0]
+        b = slope(x1,y1,x2,y2)
+        x1 = int(getx(b,ysize-1,x2,y2))
+        x2 = int(getx(b,325,x1,ysize-1))
+        cv2.line(img, (x1, ysize-1), (x2, 325), [255, 0, 0], thickness)
 
 def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
     """
@@ -96,14 +112,49 @@ def weighted_img(img, initial_img, α=0.8, β=1., λ=0.):
     """
     return cv2.addWeighted(initial_img, α, img, β, λ)
 
-for file in os.scandir("test_images/"):
-    image = mpimg.imread(file.path)
+def write_tmp_image(img,filename):
+    directory = os.path.dirname("image_tmp/")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    newfile = directory + "/" + filename
+    cv2.imwrite(newfile,img)
+
+
+for item in os.scandir("test_images/"):
+    file = item.path
+    image = mpimg.imread(file)
+    ysize = image.shape[0]
+    xsize = image.shape[1]
+    write_tmp_image(image, "orig-" + os.path.basename(file))
+
     grey_image = grayscale(image)
+    write_tmp_image(grey_image, "gray-" + os.path.basename(file))
+
     blur_image = gaussian_blur(grey_image, kernel_size=5)
-    edge_image = canny(blur_image,low_threshold=50,high_threshold=150)
-    line_image = np.copy(image)*0
-    lines = hough_lines(edge_image, rho=2, theta=1, threshold=15, min_line_len=40, max_line_gap=20)
-    color_edges_image = np.dstack((edge_image, edge_image, edge_image))
-    line_image = weighted_img(color_edges_image,line_image)
-    plt.imshow(line_image, cmap='gray')
-    plt.show(line_image)
+    write_tmp_image(blur_image,"blur-" + os.path.basename(file))
+
+    edge_image = canny(blur_image,low_threshold=30,high_threshold=150)
+    write_tmp_image(edge_image,"edge-" + os.path.basename(file))
+
+    vertices = np.array([[(xsize/2-35,325),(xsize/2+35,325), (900,ysize-1), (75,ysize-1)]], dtype=np.int32)
+    masked_edges_image = region_of_interest(edge_image,vertices)
+    write_tmp_image(masked_edges_image,"masked-edges-" + os.path.basename(file))
+
+    lines_image = np.copy(image)*0
+    lines_image = hough_lines(masked_edges_image, rho=1, theta=np.pi / 180, threshold=15, min_line_len=30, max_line_gap=15)
+    write_tmp_image(lines_image,"lines-image-" + os.path.basename(file))
+
+    weighted_image = weighted_img(lines_image,image)
+    write_tmp_image(weighted_image,"weighted-image-" + os.path.basename(file))
+
+
+#color_edges_image = np.dstack((edge_image, edge_image, edge_image))
+#write_tmp_image(color_edges_image,"color-edges-image-" + os.path.basename(file))
+
+
+
+#plt.imshow(line_image, cmap='gray')
+#plt.show(line_image)
+
+
+# for file in os.scandir("test_images/"):
