@@ -146,15 +146,3 @@ for item in os.scandir("test_images/"):
 
     weighted_image = weighted_img(lines_image,image)
     write_tmp_image(weighted_image,"weighted-image-" + os.path.basename(file))
-
-
-#color_edges_image = np.dstack((edge_image, edge_image, edge_image))
-#write_tmp_image(color_edges_image,"color-edges-image-" + os.path.basename(file))
-
-
-
-#plt.imshow(line_image, cmap='gray')
-#plt.show(line_image)
-
-
-# for file in os.scandir("test_images/"):
