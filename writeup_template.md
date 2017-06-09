@@ -10,8 +10,6 @@ The goals / steps of this project are the following:
 
 ---
 
-![grayscale_image](./image_tmp/gray-solidYellowCurve.jpg)
-
 ### Reflection
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
@@ -20,18 +18,26 @@ The pipleline goes like this:
 
 1. Store the dimensions of the image (for use in for setting the masked region of interest)
 2. Use the `grayscale()` helper function (which calls `cv2.cvtColor()`) to create a new image converted
+![grayscale_image](./image_tmp/gray-solidYellowCurve.jpg)
 
 3. Use the `gaussian_blur()` helper function (which calls `cv2.GaussianBlur()`), passing the grayscale image as input, returning a blurred image.
+![grayscale_image](./image_tmp/blur-solidYellowCurve.jpg)
 
 4. Use the `canny()` helper function (which calls `cv2.Canny()`), passing the blurred image as input, returning an image containing only detected edges.
+![grayscale_image](./image_tmp/edge-solidYellowCurve.jpg)
 
 5. Create an image containing a mask, using predefined vertices (partially computed from image dimensions), the canny edges image, and leveraging the helper function `region_of_interest()`, which returns an image containing edges within only the masked region.
+![grayscale_image](./image_tmp/masked-edges-solidYellowCurve.jpg)
+
 
 6. Pass the masked edges image to the `hough_lines()` helper function. I used the following parameters: `masked_edges_image, rho=1, theta=np.pi / 180, threshold=15, min_line_len=40, max_line_gap=15`
 
 `hough_lines()` finds lines in the masked edge image (using `cv2.HoughLinesP()`) then passes the lines to the `draw_lines()` helper function, which draws the lines on an empty image.
+![grayscale_image](./image_tmp/lines-image-solidYellowCurve.jpg)
 
 7. Pass the "lines_image" and the original image to the `weighted_img()` helper function, and then return as a result of `image_pipeline()`
+
+![grayscale_image](./image_tmp/weighted-image-solidYellowCurve.jpg)
 
 #### Modifying the `draw_lines()` function
 
