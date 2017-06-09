@@ -60,14 +60,13 @@ cv2.line(img, (x1, ysize-1), (x2, 325), [0, 0, 255], thickness)
 
 ### 2. Identify potential shortcomings with your current pipeline
 
+This pipeline is super dependent upon the mask. BEcause the mask is static, there are a few shortcomings I can think of as a result:
 
-One potential shortcoming would be what would happen when ...
-
-Another shortcoming could be ...
+- Field of view / road change: Sharp hills, tunnels, hairpin curves would cause lane lines to run outside of the static mask and throw off line computations
+- Any object (another vehicle) that crosses the lane lines (entering the masked region) would throw off the mean computation of lane lines.
+- If the angle of the camera is modified, the mask would need to be adjusted
 
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
-
-Another potential improvement could be to ...
+A possible improvement would be to compute the mask vertices as opposed to setting  static vertices.
