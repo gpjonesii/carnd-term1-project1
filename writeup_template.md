@@ -10,6 +10,8 @@ The goals / steps of this project are the following:
 
 ---
 
+![grayscale_image][./image_tmp/gray-solidYellowCurve.jpg]
+
 ### Reflection
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
@@ -18,8 +20,6 @@ The pipleline goes like this:
 
 1. Store the dimensions of the image (for use in for setting the masked region of interest)
 2. Use the `grayscale()` helper function (which calls `cv2.cvtColor()`) to create a new image converted
-
-![grayscale_image][./image_tmp/gray-solidYellowCurve.jpg]
 
 3. Use the `gaussian_blur()` helper function (which calls `cv2.GaussianBlur()`), passing the grayscale image as input, returning a blurred image.
 
