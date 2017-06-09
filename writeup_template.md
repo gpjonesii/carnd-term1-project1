@@ -19,7 +19,7 @@ The pipleline goes like this:
 1. Store the dimensions of the image (for use in for setting the masked region of interest)
 2. Use the `grayscale()` helper function (which calls `cv2.cvtColor()`) to create a new image converted
 
-![grayscale_image]: (/image_tmp/gray-solidYellowCurve.jpg)  "Grayscale"
+![grayscale_image]: (https://github.com/gpjonesii/carnd-term1-project1/blob/master/image_tmp/gray-solidYellowCurve.jpg?raw=true)  "Grayscale"
 
 3. Use the `gaussian_blur()` helper function (which calls `cv2.GaussianBlur()`), passing the grayscale image as input, returning a blurred image.
 
